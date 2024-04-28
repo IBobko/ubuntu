@@ -26,8 +26,3 @@ autoinstall:
     - curtin in-target -- sed -i /etc/default/grub -e 's/GRUB_CMDLINE_LINUX_DEFAULT=".*/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/'
     - curtin in-target -- update-grub
     
-    # Add Google Chrome PPA and install the browser
-    - curtin in-target -- sh -c 'wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -'
-    - curtin in-target -- sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list'
-    - curtin in-target -- apt-get update
-    - curtin in-target -- apt-get install -y google-chrome-stable  
