@@ -2,6 +2,7 @@
 autoinstall:
   # Version field is required by the Autoinstaller.
   version: 1
+  locale: en_US
 
   # Installs the default ubuntu-desktop packages.
   # You can add additional packages if required.
@@ -24,7 +25,13 @@ autoinstall:
     # Configures GRUB for a quiet splash screen on boot.
     - curtin in-target -- sed -i /etc/default/grub -e 's/GRUB_CMDLINE_LINUX_DEFAULT=".*/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/'
     - curtin in-target -- update-grub
+    
     # Commands to configure keyboard layouts through gsettings
     - curtin in-target -- bash -c 'gsettings set org.gnome.desktop.input-sources sources "[('\'xkb\'', '\'us\''), ('\'xkb\'', '\'ru\'')]'
     - curtin in-target -- bash -c 'gsettings set org.gnome.desktop.input-sources xkb-options "['\'grp:alt_shift_toggle\'']"
     
+    # Add Google Chrome PPA and install the browser
+    - curtin in-target -- sh -c 'wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -'
+    - curtin in-target -- sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list'
+    - curtin in-target -- apt-get update
+    - curtin in-target -- apt-get install -y google-chrome-stable  
