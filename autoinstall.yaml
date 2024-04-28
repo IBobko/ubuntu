@@ -31,4 +31,7 @@ autoinstall:
     # Configures GRUB for a quiet splash screen on boot.
     - curtin in-target -- sed -i /etc/default/grub -e 's/GRUB_CMDLINE_LINUX_DEFAULT=".*/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/'
     - curtin in-target -- update-grub
+    # Commands to configure keyboard layouts through gsettings
+    - curtin in-target -- bash -c 'gsettings set org.gnome.desktop.input-sources sources "[('\'xkb\'', '\'us\''), ('\'xkb\'', '\'ru\'')]'
+    - curtin in-target -- bash -c 'gsettings set org.gnome.desktop.input-sources xkb-options "['\'grp:alt_shift_toggle\'']"'
     
