@@ -1,0 +1,34 @@
+#cloud-config
+autoinstall:
+  # Version field is required by the Autoinstaller.
+  version: 1
+
+  # Installs the default ubuntu-desktop packages.
+  # You can add additional packages if required.
+  # packages:
+  #  - ubuntu-desktop
+
+  # Sets up SSH server and authorizes a key for remote access.
+  ssh:
+    install-server: true
+    authorized-keys: 
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDIXzBWhyNmrpXT9yN+RgAyS1mQ6tapm3G80Znp2Q9I6oAVNrKOB5BVazb7X3e7atNMXQgm6QQYsMZzoii+DSHgrmgHQ160vihtsvwmFFRxHb8fsmo0+9cH/lMoDhxWIk+Q9bLe+bqcGxAywD3EO1qgytUcmTOPjFIDyuU+cngb9TWvhJosZaZ0J8CwfzlJAYyItD0IP7fTqlUl079UU3lkU19DC3ocX+nx0q0glofnhCeSTll12H+BuPTMcPW9AKezkk8rgHlT0F8awGXmUfDj2tBFcCPrS1uyAJILU5iLKTc1oeELsIZFeUuSDNu2px+L8EKbhcnGWnbu3j5BSbHX ibobko@localhost.localdomain
+
+  # User setup can be done in three ways:
+  # 1. Create a user using this identity section.
+  # 2. Use cloud-init user-data section to manage users (then this section can be omitted).
+  # 3. Set up user on first boot (remove this section to enable).
+  identity:
+    username: nox
+    password: $6$Jd6zyTUa/TGBXgtd$cOJ8pWsZxaKDU1SAo6qX32AMtH3WRIBTqIEbBvAmJGcQ7i.kmr5IkMUuuclWjpNVw9jmkUJfaLhe0j3m1TNeE/
+    hostname: nox-home-laptop
+
+  # Important: The live-server ISO might not contain all required packages.
+  # Ensure network access to APT repositories.
+  # proxy: http://192.168.0.1:3142
+
+  late-commands:
+    # Configures GRUB for a quiet splash screen on boot.
+    - curtin in-target -- sed -i /etc/default/grub -e 's/GRUB_CMDLINE_LINUX_DEFAULT=".*/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/'
+    - curtin in-target -- update-grub
+    
