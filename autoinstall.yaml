@@ -4,6 +4,48 @@ autoinstall:
   version: 1
   locale: en_US
 
+  storage:
+autoinstall:
+  version: 1
+  storage:
+    config:
+      - id: disk0
+        type: disk
+        ptable: gpt
+        path: /dev/nvme0n1
+        preserve: false
+        grub_device: true
+      - id: boot_efi
+        type: partition
+        size: 1G
+        device: disk0
+        flag: boot
+      - id: boot
+        type: partition
+        size: 2G
+        device: disk0
+      - id: lvm_partition
+        type: partition
+        size: -1
+        device: disk0
+      - id: vg0
+        type: volume_group
+        devices: [lvm_partition]
+      - id: lvroot
+        type: logical_volume
+        name: lvroot
+        volume_group: vg0
+        size: 100G
+      - id: lvhome
+        type: logical_volume
+        name: lvhome
+        volume_group: vg0
+        size: -1
+    mounts:
+      - [lvroot, "/"]
+      - [lvhome, "/home"]
+
+
   # Installs the default ubuntu-desktop packages.
   # You can add additional packages if required.
   packages:
