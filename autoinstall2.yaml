@@ -77,7 +77,6 @@ autoinstall:
       - fstype: xfs 
         preserve: false
         volume: lvm_partition-root
-        preserve: false
         type: format
         id: format-root
       - path: /                      # Mount the root LV
