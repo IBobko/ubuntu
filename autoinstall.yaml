@@ -51,47 +51,46 @@ autoinstall:
         device: os-drive
         size: -1                     # Use all remaining space for LVM
         grub_device: false
-      - name: system                 # Create LVM Volume Group (system)
-        devices:
-        - lvm-partition
-        preserve: false
-        type: lvm_volgroup
+      - type: dm_crypt
+        volume: lvm-partition
+        id: dm_crypt-0
+        key: "key"
+        dm_name: crypto
+      - type: lvm_volgroup
         id: lvm_volgroup-0
-      - name: root                   # Create LVM Logical Volume (root)
+        devices:
+          - dm_crypt
+        name: system
+      - name: root
         volgroup: lvm_volgroup-0
         size: 16G
-        wipe: superblock
-        preserve: false
         type: lvm_partition
         id: lvm_partition-root
-      - fstype: xfs                  # Format the root LV with XFS
+      - type: format
+        fstype: xfs
         volume: lvm_partition-root
-        preserve: false
-        type: format
         id: format-root
-      - path: /                      # Mount the root LV
+      - path: /
         device: format-root
         type: mount
         id: mount-root
-      - name: home                   # Create LVM Logical Volume (home)
-        volgroup: lvm_volgroup-0     # Using the same volume group as the root
-        size: -1                     # Use all remaining space in the volume group
-        wipe: superblock             # Ensure the volume is clean before use
-        preserve: false
+      - name: home
+        volgroup: lvm_volgroup-0
+        size: -1
         type: lvm_partition
         id: lvm_partition-home
-      - fstype: xfs                  # Format the home LV with XFS
+      - type: format
+        fstype: xfs
         volume: lvm_partition-home
-        preserve: false
-        type: format
         id: format-home
-      - path: /home                  # Mount the home LV
+      - path: /home
         device: format-home
         type: mount
         id: mount-home
     swap:
-      swap: 4G                        # Allocate 4 GB for swap space
+      swap: 4G
 
+      
   # Installs the default ubuntu-desktop packages.
   # You can add additional packages if required.
   packages:
