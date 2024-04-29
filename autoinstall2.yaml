@@ -10,7 +10,7 @@ autoinstall:
           ssd: true
         id: os-drive
         ptable: gpt
-        preserve: false
+        preserve: true
         name: ''
         grub_device: false
       - type: partition              # Create an EFI partition /boot/efi
@@ -21,22 +21,33 @@ autoinstall:
         flag: boot
         grub_device: true            # This is the primary boot device
         preserve: true
+      - type: format                 # Format the EFI partition with FAT32
+        id: efi-format
+        volume: efi-partition
+        fstype: fat32
+        label: ESP
+      - path: /boot/efi              # Mount the EFI partition
+        device: efi-format
+        type: mount
+        id: mount-efi
       - type: partition              # Create a BOOT partition /boot
         number: 2
         id: boot-partition
         device: os-drive
         size: 1G
-        preserve: false
         grub_device: false
+        preserve: false
       - type: format                 # Format the BOOT partition with ext4
         id: boot-format
         volume: boot-partition
         fstype: ext4
         label: BOOT
+        preserve: false
       - path: /boot                  # Mount the BOOT partition
         device: boot-format
         type: mount
         id: mount-boot
+        preserve: false
       - type: partition              # Create an LVM partition (PV)
         number: 3
         id: lvm-partition
@@ -45,18 +56,19 @@ autoinstall:
         grub_device: false
         preserve: false
       - type: dm_crypt
+        preserve: false
         volume: lvm-partition
         id: dm_crypt-0
         key: "key"
         dm_name: crypto
-        preserve: false
       - type: lvm_volgroup
+        preserve: false
         id: lvm_volgroup-0
         devices:
           - dm_crypt-0
         name: system
-        preserve: false
       - name: root                   # Create LVM Logical Volume (root)
+        preserve: false
         volgroup: lvm_volgroup-0
         size: 16G
         wipe: superblock
@@ -64,11 +76,13 @@ autoinstall:
         type: lvm_partition
         id: lvm_partition-root
       - fstype: xfs 
+        preserve: false
         volume: lvm_partition-root
         preserve: false
         type: format
         id: format-root
       - path: /                      # Mount the root LV
+        preserve: false
         device: format-root
         type: mount
         id: mount-root
@@ -88,6 +102,7 @@ autoinstall:
         device: format-home
         type: mount
         id: mount-home
+        preserve: false
     swap:
       swap: 4G                        # Allocate 4 GB for swap space
 
