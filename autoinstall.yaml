@@ -74,21 +74,23 @@ autoinstall:
         device: format-root
         type: mount
         id: mount-root
-      - name: home
-        volgroup: lvm_volgroup-0
-        size: -1
+      - name: home                   # Create LVM Logical Volume (home)
+        volgroup: lvm_volgroup-0     # Using the same volume group as the root
+        size: -1                     # Use all remaining space in the volume group
+        wipe: superblock             # Ensure the volume is clean before use
+        preserve: false
         type: lvm_partition
         id: lvm_partition-home
       - type: format
         fstype: xfs
         volume: lvm_partition-home
         id: format-home
-      - path: /home
+      - path: /home                  # Mount the home LV
         device: format-home
         type: mount
         id: mount-home
     swap:
-      swap: 4G
+      swap: 4G                        # Allocate 4 GB for swap space
 
       
   # Installs the default ubuntu-desktop packages.
