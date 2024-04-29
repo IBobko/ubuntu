@@ -37,6 +37,7 @@ autoinstall:
         device: os-drive
         flag: msftres                # Flag to indicate it's a Microsoft Reserved Partition
         preserve: true
+        size: 16M
       - type: partition              # Create a BOOT partition /boot
         number: 3
         id: boot-partition
