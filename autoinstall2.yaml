@@ -24,10 +24,15 @@ autoinstall:
         number: 2                     # Partition number for MSR (assuming it's the second partition)
         id: msr-partition
         device: os-drive
+        size: 16M                    # The size of MSR is typically 16 MB
+        flag: msftres                # Flag to indicate it's a Microsoft Reserved Partition
+        preserve: true               # Do not modify this partition during installation
       - type: partition
         id: windows-partition
         number: 3  
         device: os-drive
+        size: 325561M
+        preserve: true 
       - type: partition              # Create a BOOT partition /boot
         number: 4
         id: boot-partition
