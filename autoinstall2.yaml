@@ -14,7 +14,8 @@ autoinstall:
         preserve: true
         name: ''
         grub_device: false
-      - number: 1                     # The partition number might need to be updated
+      - type: partition
+        number: 1                     # The partition number might need to be updated
         id: efi-partition
         device: os-drive
         flag: boot
