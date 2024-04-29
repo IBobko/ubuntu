@@ -18,16 +18,13 @@ autoinstall:
         number: 1                     # The partition number might need to be updated
         id: efi-partition
         device: os-drive
-        flag: boot
-        grub_device: true             # This is the primary boot device
       - type: partition              # Preserve the existing Microsoft Reserved Partition
         number: 2                     # Partition number for MSR (assuming it's the second partition)
         id: msr-partition
         device: os-drive
-        flag: msftres                # Flag to indicate it's a Microsoft Reserved Partition
       - type: partition
         id: windows-partition
-        number: 3  # Номер раздела NTFS, который нужно сохранить
+        number: 3  
         device: os-drive
       - type: partition              # Create a BOOT partition /boot
         number: 4
