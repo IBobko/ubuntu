@@ -13,10 +13,13 @@ autoinstall:
         preserve: true
         name: ''
         grub_device: false
-      - type: partition
-        number: 1                     # The partition number might need to be updated
+      - type: partition              # Create an EFI partition /boot/efi
+        number: 1
         id: efi-partition
         device: os-drive
+        size: 100M
+        flag: boot
+        grub_device: true            # This is the primary boot device
       - type: partition              # Preserve the existing Microsoft Reserved Partition
         number: 2                     # Partition number for MSR (assuming it's the second partition)
         id: msr-partition
