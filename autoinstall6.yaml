@@ -17,7 +17,7 @@ autoinstall:
         number: 1
         id: efi-partition
         device: os-drive
-        size: 256M
+        size: 100M
         flag: boot
         grub_device: true            # This is the primary boot device
       - type: format                 # Format the EFI partition with FAT32
