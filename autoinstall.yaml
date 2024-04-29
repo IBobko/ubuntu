@@ -4,13 +4,13 @@ autoinstall:
   locale: en_US
   storage:
     config:
-      - type: disk                   # Always install OS on our smallest SSD disk
+      - type: disk                   # Always install OS on our largest SSD disk
         match:
           size: largest              # Select the largest available SSD
           ssd: true
         id: os-drive
         ptable: gpt
-        wipe: superblock-recursive   # Wipe the disk recursively at the superblock level
+        wipe: superblock             # Wipe the disk recursively at the superblock level
         preserve: false
         name: ''
         grub_device: false
