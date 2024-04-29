@@ -24,27 +24,31 @@ autoinstall:
         type: partition
         size: 2G
         device: disk0
-      - id: lvm_partition
+      - id:lvm_partition_data
         type: partition
         size: -1
         device: disk0
       - id: vg0
-        type: volume_group
-        devices: [lvm_partition]
+        type: lvm_volgroup
+        devices: [lvm_partition_data]
       - id: lvroot
-        type: logical_volume
+        type: lvm_partition
         name: lvroot
-        volume_group: vg0
+        volgroup: vg0
         size: 100G
       - id: lvhome
-        type: logical_volume
+        type: lvm_partition
         name: lvhome
-        volume_group: vg0
+        volgroup: vg0
         size: -1
-    mounts:
-      - [lvroot, "/"]
-      - [lvhome, "/home"]
-
+      - id: mount_root
+        type mount
+        path: /
+        device lvroot
+      - id: mount_home
+        type: mount
+        path: /home
+        device: lvhome
 
   # Installs the default ubuntu-desktop packages.
   # You can add additional packages if required.
