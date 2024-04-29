@@ -38,7 +38,7 @@ autoinstall:
         flag: msftres                # Flag to indicate it's a Microsoft Reserved Partition
         preserve: true
         size: 16M
-     - type: partition              # NTFS
+      - type: partition              # NTFS
         number: 3
         id: part1
         device: os-drive
