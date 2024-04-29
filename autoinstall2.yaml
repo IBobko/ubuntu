@@ -10,7 +10,7 @@ autoinstall:
           ssd: true
         id: os-drive
         ptable: gpt
-        preserve: true
+        preserve: false
         name: ''
         grub_device: false
       - type: partition              # Create an EFI partition /boot/efi
@@ -20,21 +20,9 @@ autoinstall:
         size: 100M
         flag: boot
         grub_device: true            # This is the primary boot device
-      - type: partition              # Preserve the existing Microsoft Reserved Partition
-        number: 2                     # Partition number for MSR (assuming it's the second partition)
-        id: msr-partition
-        device: os-drive
-        size: 16M                    # The size of MSR is typically 16 MB
-        flag: msftres                # Flag to indicate it's a Microsoft Reserved Partition
-        preserve: true               # Do not modify this partition during installation
-      - type: partition
-        id: windows-partition
-        number: 3  
-        device: os-drive
-        size: 325561M
-        preserve: true 
+        preserve: true
       - type: partition              # Create a BOOT partition /boot
-        number: 4
+        number: 2
         id: boot-partition
         device: os-drive
         size: 1G
@@ -50,7 +38,7 @@ autoinstall:
         type: mount
         id: mount-boot
       - type: partition              # Create an LVM partition (PV)
-        number: 5
+        number: 3
         id: lvm-partition
         device: os-drive
         size: -1                     # Use all remaining space for LVM
