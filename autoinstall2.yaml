@@ -72,7 +72,6 @@ autoinstall:
         volgroup: lvm_volgroup-0
         size: 16G
         wipe: superblock
-        preserve: false
         type: lvm_partition
         id: lvm_partition-root
       - fstype: xfs 
