@@ -31,15 +31,8 @@ autoinstall:
         device: efi-format
         type: mount
         id: mount-efi
-      - type: partition              # Preserve the existing Microsoft Reserved Partition
-        number: 2                     # Partition number for MSR (assuming it's the second partition)
-        id: msr-partition
-        device: os-drive
-        flag: msftres                # Flag to indicate it's a Microsoft Reserved Partition
-        preserve: true
-        size: 16M
       - type: partition              # Create a BOOT partition /boot
-        number: 3
+        number: 2
         id: boot-partition
         device: os-drive
         size: 1G
@@ -56,7 +49,7 @@ autoinstall:
         type: mount
         id: mount-boot
       - type: partition              # Create an LVM partition (PV)
-        number: 4
+        number: 3
         id: lvm-partition
         device: os-drive
         size: -1                     # Use all remaining space for LVM
