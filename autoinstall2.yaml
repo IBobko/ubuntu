@@ -10,7 +10,6 @@ autoinstall:
           ssd: true
         id: os-drive
         ptable: gpt
-        wipe: superblock             # Wipe the disk recursively at the superblock level
         preserve: true
         name: ''
         grub_device: false
