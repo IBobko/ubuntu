@@ -25,6 +25,7 @@ autoinstall:
         device: disk0
       - id: vg0
         type: lvm_volgroup
+        name: vg0
         devices: [lvm_partition_data]
       - id: lvroot
         type: lvm_partition
