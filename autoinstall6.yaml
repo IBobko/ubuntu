@@ -10,7 +10,7 @@ autoinstall:
           ssd: true
         id: os-drive
         ptable: gpt
-        preserve: false
+        preserve: true
         name: ''
         grub_device: false
       - type: partition              # Create an EFI partition /boot/efi
@@ -31,8 +31,22 @@ autoinstall:
         device: efi-format
         type: mount
         id: mount-efi
+      - type: partition              # Preserve the existing Microsoft Reserved Partition
+        number: 2                     # Partition number for MSR (assuming it's the second partition)
+        id: msr-partition
+        device: os-drive
+        flag: msftres                # Flag to indicate it's a Microsoft Reserved Partition
+        preserve: true
+        size: 16M
+     - type: partition              # NTFS
+        number: 3
+        id: part1
+        device: os-drive
+        size: 320000M
+        grub_device: false
+        preserve: true
       - type: partition              # Create a BOOT partition /boot
-        number: 2
+        number: 4
         id: boot-partition
         device: os-drive
         size: 1G
@@ -49,7 +63,7 @@ autoinstall:
         type: mount
         id: mount-boot
       - type: partition              # Create an LVM partition (PV)
-        number: 3
+        number: 5
         id: lvm-partition
         device: os-drive
         size: -1                     # Use all remaining space for LVM
