@@ -42,7 +42,7 @@ autoinstall:
         number: 3
         id: part1
         device: os-drive
-        size: 320000M
+        size: 319325M
         grub_device: false
         preserve: true
       - type: partition              # Create a BOOT partition /boot
