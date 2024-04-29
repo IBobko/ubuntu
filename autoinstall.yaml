@@ -7,7 +7,9 @@ autoinstall:
       - id: disk0
         type: disk
         ptable: gpt
-        path: /dev/nvme0n1
+        match:
+          size: largest
+          ssd: true
         preserve: false
         grub_device: true
       - type: partition
@@ -45,6 +47,78 @@ autoinstall:
         type: mount
         path: /home
         device: lvhome
+
+    config:
+      - type: disk                   # Always install OS on our smallest disk
+        match:
+          size: smallest
+        id: os-drive
+        ptable: gpt
+        wipe: superblock-recursive
+        preserve: false
+        name: ''
+        grub_device: false
+      - type: partition             # EFI partition /boot/efi
+        number: 1
+        id: efi-partition
+        device: os-drive
+        size: 256M
+        flag: boot
+        grub_device: true
+      - type: format                # EFI partition format rules
+        id: efi-format
+        volume: efi-partition
+        fstype: fat32
+        label: ESP
+      - path: /boot/efi             # EFI partition mount rules
+        device: efi-format
+        type: mount
+        id: mount-efi
+      - type: partition             # BOOT partition /boot
+        number: 2
+        id: boot-partition
+        device: os-drive
+        size: 1G
+        grub_device: false
+      - type: format                # BOOT partition format rules  
+        id: boot-format
+        volume: boot-partition
+        fstype: ext4
+        label: BOOT
+      - path: /boot                 # BOOT partition mount rules
+        device: boot-format
+        type: mount
+        id: mount-boot
+      - type: partition             # LVM partition (PV)
+        number: 3
+        id: lvm-partition
+        device: os-drive
+        size: -1
+        grub_device: false
+      - name: system                # LVM VG (system)
+        devices:
+        - lvm-partition
+        preserve: false
+        type: lvm_volgroup
+        id: lvm_volgroup-0
+      - name: root                  # LVM LV (root)
+        volgroup: lvm_volgroup-0
+        size: 16G
+        wipe: superblock
+        preserve: false
+        type: lvm_partition
+        id: lvm_partition-root
+      - fstype: xfs                 # LVM LV root - format rules
+        volume: lvm_partition-root
+        preserve: false
+        type: format
+        id: format-root
+      - path: /                     # LVM LV root - mount rules
+        device: format-root
+        type: mount
+        id: mount-root
+    swap:
+      swap: 0
 
   # Installs the default ubuntu-desktop packages.
   # You can add additional packages if required.
