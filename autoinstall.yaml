@@ -4,54 +4,10 @@ autoinstall:
   locale: en_US
   storage:
     config:
-      - id: disk0
-        type: disk
-        ptable: gpt
+      - type: disk                   # Always install OS on our smallest disk
         match:
           size: largest
           ssd: true
-        preserve: false
-        grub_device: true
-      - type: partition
-        id: boot-partition
-        device: disk0
-        size: 512M
-        flag: boot
-        partition_type: EF00
-        wipe: superblock
-        preserve: false
-        grub_device: true
-      - id: lvm_partition_data
-        type: partition
-        size: -1
-        device: disk0
-      - id: vg0
-        type: lvm_volgroup
-        name: vg0
-        devices: [lvm_partition_data]
-      - id: lvroot
-        type: lvm_partition
-        name: lvroot
-        volgroup: vg0
-        size: 100G
-      - id: lvhome
-        type: lvm_partition
-        name: lvhome
-        volgroup: vg0
-        size: -1
-      - id: mount_root
-        type: mount
-        path: /
-        device: lvroot
-      - id: mount_home
-        type: mount
-        path: /home
-        device: lvhome
-
-    config:
-      - type: disk                   # Always install OS on our smallest disk
-        match:
-          size: smallest
         id: os-drive
         ptable: gpt
         wipe: superblock-recursive
