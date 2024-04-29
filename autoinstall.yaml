@@ -11,14 +11,14 @@ autoinstall:
         preserve: false
         grub_device: true
       - type: partition
+        id: boot-partition
         device: disk0
-        size: 4194304
+        size: 512M
+        flag: boot
+        partition_type: EF00
         wipe: superblock
-        flag: bios_grub
-        number: 14
         preserve: false
-        grub_device: false
-        id: partition-14
+        grub_device: true
       - type: partition
         device: disk0
         size: 111149056
@@ -26,7 +26,6 @@ autoinstall:
         flag: boot
         number: 15
         preserve: false
-        grub_device: UEFI
         id: partition-15
       - id: lvm_partition_data
         type: partition
