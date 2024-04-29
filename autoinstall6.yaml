@@ -10,7 +10,7 @@ autoinstall:
           ssd: true
         id: os-drive
         ptable: gpt
-        preserve: false
+        preserve: true
         name: ''
         grub_device: false
       - type: partition              # Create a BOOT partition /boot
