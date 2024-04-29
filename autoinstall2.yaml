@@ -26,6 +26,7 @@ autoinstall:
         volume: efi-partition
         fstype: fat32
         label: ESP
+        preserve: true
       - path: /boot/efi              # Mount the EFI partition
         device: efi-format
         type: mount
@@ -47,7 +48,6 @@ autoinstall:
         device: boot-format
         type: mount
         id: mount-boot
-        preserve: false
       - type: partition              # Create an LVM partition (PV)
         number: 3
         id: lvm-partition
@@ -82,7 +82,6 @@ autoinstall:
         type: format
         id: format-root
       - path: /                      # Mount the root LV
-        preserve: false
         device: format-root
         type: mount
         id: mount-root
@@ -102,7 +101,6 @@ autoinstall:
         device: format-home
         type: mount
         id: mount-home
-        preserve: false
     swap:
       swap: 4G                        # Allocate 4 GB for swap space
 
