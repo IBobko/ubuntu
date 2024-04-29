@@ -19,27 +19,10 @@ autoinstall:
         wipe: superblock
         preserve: false
         grub_device: true
-      - type: partition
-        device: disk0
-        size: 111149056
-        wipe: superblock
-        flag: boot
-        number: 15
-        preserve: false
-        id: partition-15
       - id: lvm_partition_data
         type: partition
         size: -1
         device: disk0
-      - type: format
-        fstype: fat32
-        volume: partition-15
-        preserve: false
-        id: format-15
-      - type: mount
-        path: /boot/efi
-        device: format-15
-        id: mount-15
       - id: vg0
         type: lvm_volgroup
         name: vg0
