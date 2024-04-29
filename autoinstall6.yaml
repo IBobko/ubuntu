@@ -13,8 +13,24 @@ autoinstall:
         preserve: false
         name: ''
         grub_device: false
+      - type: partition              # Create an EFI partition /boot/efi
+        number: 1
+        id: efi-partition
+        device: os-drive
+        size: 256M
+        flag: boot
+        grub_device: true            # This is the primary boot device
+      - type: format                 # Format the EFI partition with FAT32
+        id: efi-format
+        volume: efi-partition
+        fstype: fat32
+        label: ESP
+      - path: /boot/efi              # Mount the EFI partition
+        device: efi-format
+        type: mount
+        id: mount-efi
       - type: partition              # Create a BOOT partition /boot
-        number: 4
+        number: 2
         id: boot-partition
         device: os-drive
         size: 1G
@@ -31,7 +47,7 @@ autoinstall:
         type: mount
         id: mount-boot
       - type: partition              # Create an LVM partition (PV)
-        number: 5
+        number: 3
         id: lvm-partition
         device: os-drive
         size: -1                     # Use all remaining space for LVM
