@@ -115,8 +115,6 @@ autoinstall:
         device: format-home
         type: mount
         id: mount-home
-    swap:
-      swap: 4G                        # Allocate 4 GB for swap space
 
   # Installs the default ubuntu-desktop packages.
   # You can add additional packages if required.
