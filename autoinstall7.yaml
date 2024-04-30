@@ -21,6 +21,16 @@ autoinstall:
         flag: boot
         grub_device: true            # This is the primary boot device
         preserve: true
+      - type: format                 # Format the EFI partition with FAT32
+        id: efi-format
+        volume: efi-partition
+        fstype: fat32
+        label: ESP
+        preserve: true
+      - path: /boot/efi              # Mount the EFI partition
+        device: efi-format
+        type: mount
+        id: mount-efi
       - type: partition              # Preserve the existing Microsoft Reserved Partition
         number: 2                     # Partition number for MSR (assuming it's the second partition)
         id: msr-partition
@@ -30,7 +40,7 @@ autoinstall:
         size: 16M
       - type: partition              # NTFS
         number: 3
-        id: partition-windows
+        id: part1
         device: os-drive
         size: 319325M
         grub_device: false
@@ -41,7 +51,7 @@ autoinstall:
         device: os-drive
         size: 1G
         grub_device: false
-        preserve: true
+        preserve: false
       - type: format                 # Format the BOOT partition with ext4
         id: boot-format
         volume: boot-partition
@@ -58,7 +68,7 @@ autoinstall:
         device: os-drive
         size: -1                     # Use all remaining space for LVM
         grub_device: false
-        preserve: true
+        preserve: false
       - type: dm_crypt
         preserve: false
         volume: lvm-partition
