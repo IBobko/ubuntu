@@ -3,6 +3,8 @@ autoinstall:
   version: 1
   locale: en_US
   storage:
+    grub:
+      reorder_uefi: False
     config:
       - type: disk                   # Always install OS on our largest SSD disk
         match:
