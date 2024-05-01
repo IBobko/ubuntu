@@ -3,9 +3,6 @@ autoinstall:
   version: 1
   locale: en_US
   storage:
-    version: 1
-    layout:
-      name: direct
     config:
       - type: disk                   # Always install OS on our largest SSD disk
         match:
@@ -14,7 +11,7 @@ autoinstall:
         ptable: gpt
         preserve: true
         name: ''
-        grub_device: false
+        grub_device: true
       - type: partition              # Create an EFI partition /boot/efi
         number: 1
         id: efi-partition
