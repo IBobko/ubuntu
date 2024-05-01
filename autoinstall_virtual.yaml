@@ -39,17 +39,15 @@ autoinstall:
         size: 16M
       - type: partition              # NTFS
         number: 3
-        id: part1
+        id: windows-partition
         device: os-drive
         size: 70911M
-        grub_device: false
         preserve: true
       - type: partition              # NTFS
         number: 4
-        id: part2
+        id: windows-partition-temp
         device: os-drive
         size: 768M
-        grub_device: false
         preserve: true
       - type: partition              # Create a BOOT partition /boot
         number: 5
