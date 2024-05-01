@@ -55,7 +55,7 @@ autoinstall:
         device: os-drive
         size: 1G
         grub_device: false
-        preserve: false
+        preserve: true
       - type: format                 # Format the BOOT partition with ext4
         id: boot-format
         volume: boot-partition
@@ -72,7 +72,7 @@ autoinstall:
         device: os-drive
         size: -1                     # Use all remaining space for LVM
         grub_device: false
-        preserve: false
+        preserve: true
       - type: dm_crypt
         preserve: false
         volume: lvm-partition
