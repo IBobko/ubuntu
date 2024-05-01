@@ -7,7 +7,6 @@ autoinstall:
       - type: disk                   # Always install OS on our largest SSD disk
         match:
           size: largest              # Select the largest available SSD
-          ssd: true
         id: os-drive
         ptable: gpt
         preserve: true
@@ -42,11 +41,18 @@ autoinstall:
         number: 3
         id: part1
         device: os-drive
-        size: 319325M
+        size: 70911M
+        grub_device: false
+        preserve: true
+      - type: partition              # NTFS
+        number: 4
+        id: part2
+        device: os-drive
+        size: 768M
         grub_device: false
         preserve: true
       - type: partition              # Create a BOOT partition /boot
-        number: 4
+        number: 5
         id: boot-partition
         device: os-drive
         size: 1G
@@ -63,7 +69,7 @@ autoinstall:
         type: mount
         id: mount-boot
       - type: partition              # Create an LVM partition (PV)
-        number: 5
+        number: 6
         id: lvm-partition
         device: os-drive
         size: -1                     # Use all remaining space for LVM
