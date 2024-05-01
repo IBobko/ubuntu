@@ -1,0 +1,138 @@
+#cloud-config
+autoinstall:
+  version: 1
+  locale: en_US
+  storage:
+    config:
+      - type: disk                   # Always install OS on our largest SSD disk
+        match:
+          size: largest              # Select the largest available SSD
+          ssd: true
+        id: os-drive
+        ptable: gpt
+        preserve: true
+        name: ''
+        grub_device: false
+      - type: partition              # Create an EFI partition /boot/efi
+        number: 1
+        id: efi-partition
+        device: os-drive
+        size: 100M
+        flag: boot
+        grub_device: true            # This is the primary boot device
+        preserve: true
+      - type: format                 # Format the EFI partition with FAT32
+        id: efi-format
+        volume: efi-partition
+        fstype: fat32
+        label: ESP
+        preserve: true
+      - path: /boot/efi              # Mount the EFI partition
+        device: efi-format
+        type: mount
+        id: mount-efi
+      - type: partition              # Preserve the existing Microsoft Reserved Partition
+        number: 2                     # Partition number for MSR (assuming it's the second partition)
+        id: msr-partition
+        device: os-drive
+        flag: msftres                # Flag to indicate it's a Microsoft Reserved Partition
+        preserve: true
+        size: 16M
+      - type: partition              # NTFS
+        number: 3
+        id: part1
+        device: os-drive
+        size: 319325M
+        grub_device: false
+        preserve: true
+      - type: partition              # Create a BOOT partition /boot
+        number: 4
+        id: boot-partition
+        device: os-drive
+        size: 1G
+        grub_device: false
+        preserve: false
+      - type: format                 # Format the BOOT partition with ext4
+        id: boot-format
+        volume: boot-partition
+        fstype: ext4
+        label: BOOT
+        preserve: false
+      - path: /boot                  # Mount the BOOT partition
+        device: boot-format
+        type: mount
+        id: mount-boot
+      - type: partition              # Create an LVM partition (PV)
+        number: 5
+        id: lvm-partition
+        device: os-drive
+        size: -1                     # Use all remaining space for LVM
+        grub_device: false
+        preserve: false
+      - type: dm_crypt
+        preserve: false
+        volume: lvm-partition
+        id: dm_crypt-0
+        key: "key"
+        dm_name: crypto
+      - type: lvm_volgroup
+        preserve: false
+        id: lvm_volgroup-0
+        devices:
+          - dm_crypt-0
+        name: system
+      - name: root                   # Create LVM Logical Volume (root)
+        preserve: false
+        volgroup: lvm_volgroup-0
+        size: 16G
+        wipe: superblock
+        type: lvm_partition
+        id: lvm_partition-root
+      - fstype: xfs 
+        preserve: false
+        volume: lvm_partition-root
+        type: format
+        id: format-root
+      - path: /                      # Mount the root LV
+        device: format-root
+        type: mount
+        id: mount-root
+      - name: home                   # Create LVM Logical Volume (home)
+        volgroup: lvm_volgroup-0     # Using the same volume group as the root
+        size: -1                     # Use all remaining space in the volume group
+        wipe: superblock             # Ensure the volume is clean before use
+        preserve: false
+        type: lvm_partition
+        id: lvm_partition-home
+      - fstype: xfs
+        volume: lvm_partition-home
+        preserve: false
+        type: format
+        id: format-home
+      - path: /home                  # Mount the home LV
+        device: format-home
+        type: mount
+        id: mount-home
+
+  # Installs the default ubuntu-desktop packages.
+  # You can add additional packages if required.
+  packages:
+    - ubuntu-desktop
+
+  # Sets up SSH server and authorizes a key for remote access.
+  ssh:
+    install-server: true
+    authorized-keys: 
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDIXzBWhyNmrpXT9yN+RgAyS1mQ6tapm3G80Znp2Q9I6oAVNrKOB5BVazb7X3e7atNMXQgm6QQYsMZzoii+DSHgrmgHQ160vihtsvwmFFRxHb8fsmo0+9cH/lMoDhxWIk+Q9bLe+bqcGxAywD3EO1qgytUcmTOPjFIDyuU+cngb9TWvhJosZaZ0J8CwfzlJAYyItD0IP7fTqlUl079UU3lkU19DC3ocX+nx0q0glofnhCeSTll12H+BuPTMcPW9AKezkk8rgHlT0F8awGXmUfDj2tBFcCPrS1uyAJILU5iLKTc1oeELsIZFeUuSDNu2px+L8EKbhcnGWnbu3j5BSbHX ibobko@localhost.localdomain
+
+  # User setup
+  identity:
+    username: nox
+    password: $6$Jd6zyTUa/TGBXgtd$cOJ8pWsZxaKDU1SAo6qX32AMtH3WRIBTqIEbBvAmJGcQ7i.kmr5IkMUuuclWjpNVw9jmkUJfaLhe0j3m1TNeE/
+    hostname: nox-home-laptop
+
+  late-commands:
+    # Configures GRUB for a quiet splash screen on boot.
+    - curtin in-target -- sed -i /etc/default/grub -e 's/GRUB_CMDLINE_LINUX_DEFAULT=".*/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/'
+    - curtin in-target -- update-grub
+    
