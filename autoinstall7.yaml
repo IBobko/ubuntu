@@ -118,7 +118,6 @@ autoinstall:
   # You can add additional packages if required.
   packages:
     - ubuntu-desktop
-    - spotify-client
     - vlc
 
   # Sets up SSH server and authorizes a key for remote access.
@@ -140,5 +139,7 @@ autoinstall:
     # Install Chrome
     - curtin in-target -- sh -c 'wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'
     - curtin in-target -- sh -c 'apt-get install -y ./google-chrome-stable_current_amd64.deb'
+    # Install Spotify via Snap
+    - curtin in-target -- sh -c 'snap install spotify'
 
     
