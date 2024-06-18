@@ -118,6 +118,8 @@ autoinstall:
   # You can add additional packages if required.
   packages:
     - ubuntu-desktop
+    - spotify-client
+    - vlc
 
   # Sets up SSH server and authorizes a key for remote access.
   ssh:
@@ -135,4 +137,8 @@ autoinstall:
     # Configures GRUB for a quiet splash screen on boot.
     - curtin in-target -- sed -i /etc/default/grub -e 's/GRUB_CMDLINE_LINUX_DEFAULT=".*/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/'
     - curtin in-target -- update-grub
+    # Install Chrome
+    - curtin in-target -- sh -c 'wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'
+    - curtin in-target -- sh -c 'apt-get install -y ./google-chrome-stable_current_amd64.deb'
+
     
