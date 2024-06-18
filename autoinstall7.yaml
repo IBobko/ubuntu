@@ -84,11 +84,11 @@ autoinstall:
       - name: root                   # Create LVM Logical Volume (root)
         preserve: false
         volgroup: lvm_volgroup-0
-        size: 16G
+        size: 160G
         wipe: superblock
         type: lvm_partition
         id: lvm_partition-root
-      - fstype: xfs 
+      - fstype: ext4 
         preserve: false
         volume: lvm_partition-root
         type: format
@@ -104,7 +104,7 @@ autoinstall:
         preserve: false
         type: lvm_partition
         id: lvm_partition-home
-      - fstype: xfs
+      - fstype: ext4
         volume: lvm_partition-home
         preserve: false
         type: format
