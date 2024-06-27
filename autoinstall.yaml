@@ -119,6 +119,8 @@ autoinstall:
   packages:
     - ubuntu-desktop
     - vlc
+    - git
+    - build-essential
 
   # Sets up SSH server and authorizes a key for remote access.
   ssh:
@@ -139,6 +141,12 @@ autoinstall:
     # Install Chrome
     - curtin in-target -- sh -c 'wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'
     - curtin in-target -- sh -c 'apt-get install -y ./google-chrome-stable_current_amd64.deb'
-
+    # Install PyCharm
+    - curtin in-target -- sh -c 'wget https://download.jetbrains.com/python/pycharm-community-2022.2.4.tar.gz -O /tmp/pycharm.tar.gz'
+    - curtin in-target -- sh -c 'mkdir -p /opt/pycharm'
+    - curtin in-target -- sh -c 'tar xzf /tmp/pycharm.tar.gz -C /opt/pycharm --strip-components=1'
+    - curtin in-target -- sh -c 'ln -s /opt/pycharm/bin/pycharm.sh /usr/local/bin/pycharm'
+    - curtin in-target -- sh -c 'rm /tmp/pycharm.tar.gz'
+    
 
     
