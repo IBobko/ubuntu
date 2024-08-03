@@ -121,6 +121,7 @@ autoinstall:
     - vlc
     - git
     - build-essential
+    - curl
 
   # Sets up SSH server and authorizes a key for remote access.
   ssh:
