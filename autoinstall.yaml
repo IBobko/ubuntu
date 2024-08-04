@@ -152,6 +152,13 @@ autoinstall:
     - curtin in-target -- sh -c 'tar xzf /tmp/pycharm.tar.gz -C /opt/pycharm --strip-components=1'
     - curtin in-target -- sh -c 'ln -s /opt/pycharm/bin/pycharm.sh /usr/local/bin/pycharm'
     - curtin in-target -- sh -c 'rm /tmp/pycharm.tar.gz'
+    # Install VeraCrypt by downloading it to a temporary location,
+    # extracting it to the optimal directory
+    - curtin in-target -- sh -c 'wget https://www.veracrypt.fr/code/VeraCrypt/snapshot/VeraCrypt_1.26.7.tar.gz -O /tmp/veracrypt.tar.gz'
+    - curtin in-target -- sh -c 'mkdir -p /opt/veracrypt'
+    - curtin in-target -- sh -c 'tar xzf /tmp/veracrypt.tar.gz -C /opt/veracrypt --strip-components=1'
+    - curtin in-target -- sh -c 'cd /opt/veracrypt/src && make && make install'
+    - curtin in-target -- sh -c 'rm /tmp/veracrypt.tar.gz'
     
 
     
