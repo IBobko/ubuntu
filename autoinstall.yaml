@@ -139,10 +139,13 @@ autoinstall:
     # Configures GRUB for a quiet splash screen on boot.
     - curtin in-target -- sed -i /etc/default/grub -e 's/GRUB_CMDLINE_LINUX_DEFAULT=".*/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/'
     - curtin in-target -- update-grub
-    # Install Chrome
+    # Automatically installs recommended drivers for the detected hardware
+    - curtin in-target -- sh -c 'ubuntu-drivers autoinstall'
+    # Download and install Google Chrome from the official source
     - curtin in-target -- sh -c 'wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'
     - curtin in-target -- sh -c 'apt-get install -y ./google-chrome-stable_current_amd64.deb'
-    # Install PyCharm
+    # Install PyCharm Community Edition by downloading it to a temporary location,
+    # extracting it to the optimal directory, and creating a symlink for easy access
     - curtin in-target -- sh -c 'wget https://download.jetbrains.com/python/pycharm-community-2022.2.4.tar.gz -O /tmp/pycharm.tar.gz'
     - curtin in-target -- sh -c 'mkdir -p /opt/pycharm'
     - curtin in-target -- sh -c 'tar xzf /tmp/pycharm.tar.gz -C /opt/pycharm --strip-components=1'
