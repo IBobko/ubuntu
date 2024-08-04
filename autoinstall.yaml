@@ -122,6 +122,7 @@ autoinstall:
     - git
     - build-essential
     - curl
+    - conky
 
   # Sets up SSH server and authorizes a key for remote access.
   ssh:
