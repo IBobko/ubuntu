@@ -146,7 +146,7 @@ autoinstall:
     - curtin in-target -- sh -c 'apt-get install -y ./google-chrome-stable_current_amd64.deb'
     # Install PyCharm Community Edition by downloading it to a temporary location,
     # extracting it to the optimal directory, and creating a symlink for easy access
-    - curtin in-target -- sh -c 'wget https://download.jetbrains.com/python/pycharm-community-2022.2.4.tar.gz -O /tmp/pycharm.tar.gz'
+    - curtin in-target -- sh -c 'wget https://download.jetbrains.com/python/pycharm-professional-2024.1.4.tar.gz -O /tmp/pycharm.tar.gz'
     - curtin in-target -- sh -c 'mkdir -p /opt/pycharm'
     - curtin in-target -- sh -c 'tar xzf /tmp/pycharm.tar.gz -C /opt/pycharm --strip-components=1'
     - curtin in-target -- sh -c 'ln -s /opt/pycharm/bin/pycharm.sh /usr/local/bin/pycharm'
